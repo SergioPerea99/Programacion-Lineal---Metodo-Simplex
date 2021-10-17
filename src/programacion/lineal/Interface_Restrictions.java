@@ -5,17 +5,39 @@
  */
 package programacion.lineal;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Lenovo
  */
 public class Interface_Restrictions extends javax.swing.JFrame {
-
+    
+    Interface_Main interfaz_principal;
+    ArrayList<ArrayList<Double>> matriz_valores_restricciones; //NºFilas = Nº de restricciones; NºColumnas = Nº de variables.
+    
     /**
      * Creates new form Interface_Restrictions
      */
     public Interface_Restrictions() {
         initComponents();
+    }
+    
+    public void setRestricciones(Interface_Main i){
+        interfaz_principal = i;
+        matriz_valores_restricciones = new ArrayList<>();
+        for (int f = 0; f < interfaz_principal.get_NumRestricciones(); f++) {
+            matriz_valores_restricciones.add(f, new ArrayList<>());
+            for (int c = 0; c < interfaz_principal.get_NumVarDecision(); c++) {
+                matriz_valores_restricciones.get(f).add(c, 0.0);
+            }
+        }
+        
+    }
+    
+    public void rellenaRestricciones(){
+        //TODO: AÑADIR UNA TABLA DE FORMA QUE SE PUEDA AÑADIR LAS RESTRICCIONES SIN PROBLEMAS
+        // - USAR LA TABLA PARA PONER EN LOS HUECOS EL VALOR DE LA Xi e INDICAR EL <= (YA PUESTO) Y A LA DERECHA OTRO HUECO PA QUE PONGAN EL VALOR.
     }
 
     /**

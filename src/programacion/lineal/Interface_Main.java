@@ -173,7 +173,10 @@ public class Interface_Main extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         NUM_RESTRICCIONES = Integer.parseInt(jTextField2.getText());
-        
+        restricciones = new Interface_Restrictions();
+        restricciones.setRestricciones(this);
+        restricciones.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -241,6 +244,10 @@ public class Interface_Main extends javax.swing.JFrame {
     
     public Integer get_NumVarDecision(){
         return NUM_VAR_DECISION;
+    }
+    
+    public Integer get_NumRestricciones(){
+        return NUM_RESTRICCIONES;
     }
     
     public void setVisibilidad_FuncionObjetivo(boolean b){
