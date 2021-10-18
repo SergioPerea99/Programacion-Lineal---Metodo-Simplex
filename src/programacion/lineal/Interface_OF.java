@@ -111,8 +111,7 @@ public class Interface_OF extends javax.swing.JFrame {
             jLabel1.setText(" x"+(++num_var_aniadidas + 1));
         }else{
             //GUARDADA TODA LA INFORMACIÓN SOBRE LA FUNCIÓN OBJETIVO --> SALIR DE NUEVO A LA INTERFAZ PRINCIPAL.
-            System.out.println("Valores de las variables decisión : "+multiplos_variables.toString());
-            interfaz_principal.setVisibilidad_FuncionObjetivo(false);
+            interfaz_principal.setVisibilidad_FuncionObjetivo(true);
             interfaz_principal.setVisible(true);
             dispose();
         }

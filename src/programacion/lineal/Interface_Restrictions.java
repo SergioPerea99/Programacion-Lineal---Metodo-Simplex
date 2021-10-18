@@ -6,6 +6,7 @@
 package programacion.lineal;
 
 import java.util.ArrayList;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -127,16 +128,19 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             jTable1.setVisible(false);
             variable_entrante = eleccion_variable_entrante(); //Devuelve la posición de la variable de menor valor (si no existe variable negativa devolverá -1).
             int var_saliente;
-            if (variable_entrante != -1)
+            if (variable_entrante != -1){
                 variable_saliente = eleccion_variable_saliente();
-            else
-                return; //Finaliza el proceso de optimización
             jTable1.setVisible(true);
             paso1 = true; //Paso realizado.
             paso2 = false; //Activa en la siguiente vez que se pulsa el paso 2.
+            }else{
+                interfaz_principal.mostrarSolucion();
+                interfaz_principal.setVisible(true);
+                dispose();
+            }
+            
         }
         else if (!paso2){ //Paso 2 --> modificaciones en la fila y columna que cruza respecto a la variable de entrada y salida.
-            //1ºHACER EL PIVOTE VALOR 1 --> DIVIDIR LA FILA POR EL VALOR QUE HACE AL PIVOTE = 1.
             jTable1.setVisible(false);
             rebuild_pivot();
             jTable1.setVisible(true);
@@ -148,12 +152,22 @@ public class Interface_Restrictions extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        int var_entrante = eleccion_variable_entrante();
-        int var_saliente;
-        if (var_entrante != -1)
-                var_saliente = eleccion_variable_saliente();
-            else
-                return; //Finaliza el proceso de optimización
+        boolean fin = false;
+        while (!fin){
+            variable_entrante = eleccion_variable_entrante();
+            if (variable_entrante != -1){
+                    variable_saliente = eleccion_variable_saliente();
+                    rebuild_pivot();
+            }else{
+                    fin = true; //Finaliza el proceso de optimización
+                    interfaz_principal.mostrarSolucion();
+                    interfaz_principal.setVisible(true);
+                    dispose();
+            }
+            
+        }
+        
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -302,5 +316,9 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         //INTERCAMBIAR LA VARIABLE SALIENTE POR LA VARIABLE ENTRANTE EN TÉRMINOS DE NOMBRE.
         jTable1.setValueAt(jTable1.getColumnName(variable_entrante).toString(),variable_saliente, 1);
         
+    }
+    
+    public JTable getTable(){
+        return jTable1;
     }
 }
