@@ -16,7 +16,8 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     
     Interface_Main interfaz_principal;
     ArrayList<ArrayList<Double>> matriz_valores_restricciones; //NºFilas = Nº de restricciones; NºColumnas = Nº de variables.
-    
+    Boolean paso1, paso2, paso3, paso4;
+    Integer variable_entrante, variable_saliente;
     /**
      * Creates new form Interface_Restrictions
      */
@@ -33,6 +34,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
                 matriz_valores_restricciones.get(f).add(c, 0.0);
             }
         }
+        paso1 = paso2 = paso3 = paso4 = false;
         
     }
     
@@ -53,6 +55,8 @@ public class Interface_Restrictions extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,25 +73,92 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        jButton1.setText("PASO A PASO");
+        jButton1.setActionCommand("SIGUIENTE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("SALTAR PROCESO");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(143, 143, 143)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(155, 155, 155)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(162, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //TODO: RECOGER LOS VALORES QUE EL USER METE PARA LAS RESTRICCIONES --> EMPEZAR EL PROCESO DE OPTIMIZACIÓN.
+        //IDEA: IR ACTUALIZANDO EL JTABLE CONFORME SE VAN HACIENDO LOS CAMBIOS DE OPTIMIZACIÓN QUE EL ALGORITMO VAYA DECIDIENDO (PUEDE QUEDAR BIEN) --> EJECUTANDO PASO A PASO PODRÍA FUNCIONAR
+        
+        if (!paso1){  //Paso 1 --> encontrar la variable saliente y entrante.
+            jButton2.setVisible(false);
+            jTable1.setVisible(false);
+            variable_entrante = eleccion_variable_entrante(); //Devuelve la posición de la variable de menor valor (si no existe variable negativa devolverá -1).
+            int var_saliente;
+            if (variable_entrante != -1)
+                variable_saliente = eleccion_variable_saliente();
+            else
+                return; //Finaliza el proceso de optimización
+            jTable1.setVisible(true);
+            paso1 = true; //Paso realizado.
+            paso2 = false; //Activa en la siguiente vez que se pulsa el paso 2.
+        }
+        else if (!paso2){ //Paso 2 --> modificaciones en la fila y columna que cruza respecto a la variable de entrada y salida.
+            //1ºHACER EL PIVOTE VALOR 1 --> DIVIDIR LA FILA POR EL VALOR QUE HACE AL PIVOTE = 1.
+            jTable1.setVisible(false);
+            rebuild_pivot();
+            jTable1.setVisible(true);
+            paso2 = true; //Paso realizado;
+            paso3 = false; //Activa en la siguiente vez que se pulsa el paso 3.
+        }else if (!paso3){
+            
+            paso3 = true; //Paso realizado.
+            paso1 = false; //Volvemos a activar el paso 1.
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int var_entrante = eleccion_variable_entrante();
+        int var_saliente;
+        if (var_entrante != -1)
+                var_saliente = eleccion_variable_saliente();
+            else
+                return; //Finaliza el proceso de optimización
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -139,20 +210,18 @@ public class Interface_Restrictions extends javax.swing.JFrame {
                 tabla_auxiliar.addRow(new Object[tabla_auxiliar.getColumnCount()]);
                 if (i < interfaz_principal.get_NumRestricciones()){
                     tabla_auxiliar.setValueAt(0, i, 0);
-                    tabla_auxiliar.setValueAt("x"+(i+interfaz_principal.get_NumRestricciones()), i, 1);
+                    tabla_auxiliar.setValueAt("x"+(i+interfaz_principal.get_NumRestricciones()+1), i, 1);
                 }else{
                     tabla_auxiliar.setValueAt("Zj - Cj", i, 1);
                     int cont = 0;
-                    System.err.println(interfaz_principal.get_Var_Decision().toString());
                     for(int c = 2; c < tabla_auxiliar.getColumnCount()-1; c++){
                         if(c < 3 || c >= interfaz_principal.get_NumVarDecision()+3)
                             tabla_auxiliar.setValueAt(0, i, c); 
                         else
-                            tabla_auxiliar.setValueAt("- ("+interfaz_principal.get_Var_Decision().get(cont++)+")", i, c);
+                            tabla_auxiliar.setValueAt("-"+interfaz_principal.get_Var_Decision().get(cont++), i, c);
                         
                     }
                     
-
                 }
                     
             }
@@ -162,7 +231,77 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+    
+    /**
+     * @brief Variable entrante
+     * @post Elige la posición de la columna que corresponde con la variable que menor valor tiene en la fila correspondiente al Zj - Cj
+     * @return Posición de la variable o -1 si no encuentra ningun valor negativo.
+     */
+    private int eleccion_variable_entrante() {
+        int columna_elegida = -1;
+        double menor_valor = 9999.0;
+        for (int c = 3; c < 3+interfaz_principal.get_NumVarDecision()*2 && c < jTable1.getColumnCount(); c++) { //Recorre las variables...
+            String s = jTable1.getValueAt(2, c).toString();
+            Double d = Double.parseDouble(s);
+            if(d < 0 && menor_valor > d){
+                menor_valor = d;
+                columna_elegida = c;
+            }    
+        }
+
+        return columna_elegida; //TODO: SI HAY VARIOS, HACERLO RANDOM (AHORA MISMO ES EL PRIMERO QUE ENCUENTRA CON ESE VALOR)
+    }
+
+    private int eleccion_variable_saliente() {
+        int fila_elegida = -1;
+        Double menor_valor = 999.0, nominador, denominador, valor;
+        
+        //CALCULAR EL (Bi/Ai) Y ELEGIR EL DE MENOR VALOR.
+        for (int f = 0; f < jTable1.getRowCount()-1; f++) {
+            nominador = Double.parseDouble(jTable1.getValueAt(f, 2).toString());
+            denominador = Double.parseDouble(jTable1.getValueAt(f, variable_entrante).toString());
+            valor = nominador / denominador;
+            if (valor < menor_valor){
+                menor_valor = valor;
+                fila_elegida = f;
+            }
+            jTable1.setValueAt(valor.toString(), f, jTable1.getColumnCount()-1);
+        }
+        
+        
+        
+        return fila_elegida;
+    }
+
+    private void rebuild_pivot() {
+        Double valor_matriz, nuevo_valor;
+        Double valor_pivote = Double.parseDouble(jTable1.getValueAt(variable_saliente, variable_entrante).toString());
+        
+        //Hacer el pivote = 1
+        for (int c = 2; c < jTable1.getColumnCount(); c++) {
+            valor_matriz = Double.parseDouble(jTable1.getValueAt(variable_saliente, c).toString());
+            nuevo_valor = valor_matriz / valor_pivote;
+            jTable1.setValueAt(nuevo_valor.toString(), variable_saliente, c);
+        }
+        
+        //Hacer que los demás valores de la columna respecto al pivote sean 0.
+        Double valor_fila_restar, valor_f_c_pivote;
+        for (int f = 0; f < jTable1.getRowCount()-1; f++) {
+            valor_fila_restar = Double.parseDouble(jTable1.getValueAt(f, variable_entrante).toString());
+            if (f != variable_saliente){
+                for (int c = 2; c < jTable1.getColumnCount(); c++) {
+                    valor_f_c_pivote = Double.parseDouble(jTable1.getValueAt(variable_saliente, c).toString());
+                    valor_matriz = Double.parseDouble(jTable1.getValueAt(f, c).toString());
+                    nuevo_valor = valor_matriz - valor_fila_restar * valor_f_c_pivote;
+                    jTable1.setValueAt(nuevo_valor.toString(), f, c);
+                }
+            }
+        }
+        
+    }
 }
