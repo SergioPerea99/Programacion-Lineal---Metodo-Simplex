@@ -5,6 +5,8 @@
  */
 package programacion.lineal;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Sergio
@@ -315,6 +317,10 @@ public class Interface_Main extends javax.swing.JFrame {
         jLabel3.setText(cadena);
         jLabel3.setVisible(!b);
         
+    }
+    
+    public ArrayList get_Var_Decision(){
+        return funcion_objetivo.getMultiplosVar();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

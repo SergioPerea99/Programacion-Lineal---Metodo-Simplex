@@ -128,10 +128,10 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     private void generarMatriz(){
         DefaultTableModel tabla_auxiliar = new DefaultTableModel();
             
-            tabla_auxiliar.addColumn("coef. en Z");
+            tabla_auxiliar.addColumn("coef de Z (Cj)");
             tabla_auxiliar.addColumn("V.B.");
             tabla_auxiliar.addColumn("b");
-            for (int i = 0; i < interfaz_principal.get_NumRestricciones()*2; i++)
+            for (int i = 0; i < interfaz_principal.get_NumRestricciones()*2; i++) //TODO: COMPROBAR SI ES CORRECTO QUE SEA SEGÚN EL NºRESTRICCIONE O SI ES SEGÚN EL NºVARIABLES
                 tabla_auxiliar.addColumn("x"+(i+1));
             tabla_auxiliar.addColumn("b/a (a >= 0)");
             
@@ -140,16 +140,23 @@ public class Interface_Restrictions extends javax.swing.JFrame {
                 if (i < interfaz_principal.get_NumRestricciones()){
                     tabla_auxiliar.setValueAt(0, i, 0);
                     tabla_auxiliar.setValueAt("x"+(i+interfaz_principal.get_NumRestricciones()), i, 1);
-                }
-            }
-//            for (int i = 0; i < tabla_auxiliar.getRowCount(); i++) {
-//                for (int j = 0; j < tabla_auxiliar.getColumnCount(); j++) {
-//                    if (i == j) {
-//                        tabla_auxiliar.setValueAt(1, i, j + 1);
-//                    }
-//                }
-//            }
+                }else{
+                    tabla_auxiliar.setValueAt("Zj - Cj", i, 1);
+                    int cont = 0;
+                    System.err.println(interfaz_principal.get_Var_Decision().toString());
+                    for(int c = 2; c < tabla_auxiliar.getColumnCount()-1; c++){
+                        if(c < 3 || c >= interfaz_principal.get_NumVarDecision()+3)
+                            tabla_auxiliar.setValueAt(0, i, c); 
+                        else
+                            tabla_auxiliar.setValueAt("- ("+interfaz_principal.get_Var_Decision().get(cont++)+")", i, c);
+                        
+                    }
+                    
 
+                }
+                    
+            }
+            
             jTable1.setModel(tabla_auxiliar);
     
     }
