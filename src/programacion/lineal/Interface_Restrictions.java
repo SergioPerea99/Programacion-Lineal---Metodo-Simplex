@@ -16,7 +16,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     
     Interface_Main interfaz_principal;
     ArrayList<ArrayList<Double>> matriz_valores_restricciones; //NºFilas = Nº de restricciones; NºColumnas = Nº de variables.
-    Boolean paso1, paso2, paso3, paso4;
+    Boolean paso1, paso2;
     Integer variable_entrante, variable_saliente;
     /**
      * Creates new form Interface_Restrictions
@@ -34,7 +34,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
                 matriz_valores_restricciones.get(f).add(c, 0.0);
             }
         }
-        paso1 = paso2 = paso3 = paso4 = false;
+        paso1 = paso2 = false;
         
     }
     
@@ -141,11 +141,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             rebuild_pivot();
             jTable1.setVisible(true);
             paso2 = true; //Paso realizado;
-            paso3 = false; //Activa en la siguiente vez que se pulsa el paso 3.
-        }else if (!paso3){
-            
-            paso3 = true; //Paso realizado.
-            paso1 = false; //Volvemos a activar el paso 1.
+            paso1 = false; //Activa en la siguiente vez que se pulsa el paso 3.
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -209,7 +205,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             for (int i = 0; i < interfaz_principal.get_NumRestricciones()+1; i++) {
                 tabla_auxiliar.addRow(new Object[tabla_auxiliar.getColumnCount()]);
                 if (i < interfaz_principal.get_NumRestricciones()){
-                    tabla_auxiliar.setValueAt(0, i, 0);
+                    tabla_auxiliar.setValueAt(0.0, i, 0);
                     tabla_auxiliar.setValueAt("x"+(i+interfaz_principal.get_NumRestricciones()+1), i, 1);
                 }else{
                     tabla_auxiliar.setValueAt("Zj - Cj", i, 1);
@@ -283,7 +279,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         Double valor_pivote = Double.parseDouble(jTable1.getValueAt(variable_saliente, variable_entrante).toString());
         
         //Hacer el pivote = 1
-        for (int c = 2; c < jTable1.getColumnCount(); c++) {
+        for (int c = 2; c < jTable1.getColumnCount()-1; c++) {
             valor_matriz = Double.parseDouble(jTable1.getValueAt(variable_saliente, c).toString());
             nuevo_valor = valor_matriz / valor_pivote;
             jTable1.setValueAt(nuevo_valor.toString(), variable_saliente, c);
@@ -291,10 +287,10 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         
         //Hacer que los demás valores de la columna respecto al pivote sean 0.
         Double valor_fila_restar, valor_f_c_pivote;
-        for (int f = 0; f < jTable1.getRowCount()-1; f++) {
+        for (int f = 0; f < jTable1.getRowCount(); f++) {
             valor_fila_restar = Double.parseDouble(jTable1.getValueAt(f, variable_entrante).toString());
             if (f != variable_saliente){
-                for (int c = 2; c < jTable1.getColumnCount(); c++) {
+                for (int c = 2; c < jTable1.getColumnCount()-1; c++) {
                     valor_f_c_pivote = Double.parseDouble(jTable1.getValueAt(variable_saliente, c).toString());
                     valor_matriz = Double.parseDouble(jTable1.getValueAt(f, c).toString());
                     nuevo_valor = valor_matriz - valor_fila_restar * valor_f_c_pivote;
@@ -302,6 +298,9 @@ public class Interface_Restrictions extends javax.swing.JFrame {
                 }
             }
         }
+        
+        //INTERCAMBIAR LA VARIABLE SALIENTE POR LA VARIABLE ENTRANTE EN TÉRMINOS DE NOMBRE.
+        jTable1.setValueAt(jTable1.getColumnName(variable_entrante).toString(),variable_saliente, 1);
         
     }
 }
