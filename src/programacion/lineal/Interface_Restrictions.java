@@ -19,6 +19,8 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     ArrayList<ArrayList<Double>> matriz_valores_restricciones; //NºFilas = Nº de restricciones; NºColumnas = Nº de variables.
     Boolean paso1, paso2;
     Integer variable_entrante, variable_saliente;
+    String[] v_restricciones;
+    Boolean parametros_mostrados;
     /**
      * Creates new form Interface_Restrictions
      */
@@ -35,7 +37,8 @@ public class Interface_Restrictions extends javax.swing.JFrame {
                 matriz_valores_restricciones.get(f).add(c, 0.0);
             }
         }
-        paso1 = paso2 = false;
+        paso1 = paso2 = parametros_mostrados = false;
+        v_restricciones = new String[interfaz_principal.get_NumRestricciones()];
         
     }
     
@@ -44,7 +47,24 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         // - USAR LA TABLA PARA PONER EN LOS HUECOS EL VALOR DE LA Xi e INDICAR EL <= (YA PUESTO) Y A LA DERECHA OTRO HUECO PA QUE PONGAN EL VALOR.
         generarMatriz();
     }
-
+    
+    public String[] obtenerRestricciones(){
+        String cadena;
+        for (int f = 0; f < jTable1.getRowCount()-1; f++) {
+            cadena = "";
+            for (int c = 3; c < 3+interfaz_principal.get_NumVarDecision(); c++) {
+                cadena += "("+jTable1.getValueAt(f, c).toString()+")"+jTable1.getColumnName(c);
+                if (c < 3+interfaz_principal.get_NumVarDecision()-1)
+                    cadena += " + ";
+                else{
+                    cadena += " <= "+jTable1.getValueAt(f, 2);
+                }
+            }
+            v_restricciones[f] = cadena;
+        }
+        return v_restricciones;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,7 +102,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("SALTAR PROCESO");
+        jButton2.setText("PROCESO COMPLETO");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -95,14 +115,14 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(143, 143, 143)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(155, 155, 155)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addGap(146, 146, 146)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,7 +142,10 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //TODO: RECOGER LOS VALORES QUE EL USER METE PARA LAS RESTRICCIONES --> EMPEZAR EL PROCESO DE OPTIMIZACIÓN.
         //IDEA: IR ACTUALIZANDO EL JTABLE CONFORME SE VAN HACIENDO LOS CAMBIOS DE OPTIMIZACIÓN QUE EL ALGORITMO VAYA DECIDIENDO (PUEDE QUEDAR BIEN) --> EJECUTANDO PASO A PASO PODRÍA FUNCIONAR
-        
+        if (!parametros_mostrados){
+            interfaz_principal.mostrarParametros();
+            parametros_mostrados = true;
+        }
         if (!paso1){  //Paso 1 --> encontrar la variable saliente y entrante.
             jButton2.setVisible(false);
             jTable1.setVisible(false);
@@ -153,6 +176,10 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         boolean fin = false;
+        
+        interfaz_principal.mostrarParametros();
+
+        
         while (!fin){
             variable_entrante = eleccion_variable_entrante();
             if (variable_entrante != -1){
@@ -264,7 +291,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             }    
         }
 
-        return columna_elegida; //TODO: SI HAY VARIOS, HACERLO RANDOM (AHORA MISMO ES EL PRIMERO QUE ENCUENTRA CON ESE VALOR)
+        return columna_elegida;
     }
 
     private int eleccion_variable_saliente() {
