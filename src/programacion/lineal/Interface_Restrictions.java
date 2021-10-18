@@ -6,6 +6,7 @@
 package programacion.lineal;
 
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -38,6 +39,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     public void rellenaRestricciones(){
         //TODO: AÑADIR UNA TABLA DE FORMA QUE SE PUEDA AÑADIR LAS RESTRICCIONES SIN PROBLEMAS
         // - USAR LA TABLA PARA PONER EN LOS HUECOS EL VALOR DE LA Xi e INDICAR EL <= (YA PUESTO) Y A LA DERECHA OTRO HUECO PA QUE PONGAN EL VALOR.
+        generarMatriz();
     }
 
     /**
@@ -49,17 +51,39 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         pack();
@@ -100,6 +124,38 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         });
     }
 
+    
+    private void generarMatriz(){
+        DefaultTableModel tabla_auxiliar = new DefaultTableModel();
+            
+            tabla_auxiliar.addColumn("coef. en Z");
+            tabla_auxiliar.addColumn("V.B.");
+            tabla_auxiliar.addColumn("b");
+            for (int i = 0; i < interfaz_principal.get_NumRestricciones()*2; i++)
+                tabla_auxiliar.addColumn("x"+(i+1));
+            tabla_auxiliar.addColumn("b/a (a >= 0)");
+            
+            for (int i = 0; i < interfaz_principal.get_NumRestricciones()+1; i++) {
+                tabla_auxiliar.addRow(new Object[tabla_auxiliar.getColumnCount()]);
+                if (i < interfaz_principal.get_NumRestricciones()){
+                    tabla_auxiliar.setValueAt(0, i, 0);
+                    tabla_auxiliar.setValueAt("x"+(i+interfaz_principal.get_NumRestricciones()), i, 1);
+                }
+            }
+//            for (int i = 0; i < tabla_auxiliar.getRowCount(); i++) {
+//                for (int j = 0; j < tabla_auxiliar.getColumnCount(); j++) {
+//                    if (i == j) {
+//                        tabla_auxiliar.setValueAt(1, i, j + 1);
+//                    }
+//                }
+//            }
+
+            jTable1.setModel(tabla_auxiliar);
+    
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

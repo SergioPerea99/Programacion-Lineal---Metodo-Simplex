@@ -11,8 +11,8 @@ package programacion.lineal;
  */
 public class Interface_Main extends javax.swing.JFrame {
     
-    private Integer NUM_VAR_DECISION;
-    private Integer NUM_RESTRICCIONES;
+    private Integer NUM_VAR_DECISION = 0;
+    private Integer NUM_RESTRICCIONES = 0;
     private Interface_OF funcion_objetivo;
     private Interface_Restrictions restricciones;
     
@@ -34,6 +34,9 @@ public class Interface_Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
+        jButton4 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
@@ -43,6 +46,42 @@ public class Interface_Main extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+
+        jFrame1.setAutoRequestFocus(false);
+        jFrame1.setSize(new java.awt.Dimension(500, 300));
+
+        jButton4.setText("OK");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("jLabel4");
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addGap(186, 186, 186)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(262, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -172,12 +211,24 @@ public class Interface_Main extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        NUM_RESTRICCIONES = Integer.parseInt(jTextField2.getText());
-        restricciones = new Interface_Restrictions();
-        restricciones.setRestricciones(this);
-        restricciones.setVisible(true);
-        dispose();
+        if (NUM_VAR_DECISION != 0){
+            NUM_RESTRICCIONES = Integer.parseInt(jTextField2.getText());
+            restricciones = new Interface_Restrictions();
+            restricciones.setRestricciones(this);
+            restricciones.rellenaRestricciones();
+            restricciones.setVisible(true);
+            dispose();
+        }else{
+            jFrame1.setVisible(true);
+            dispose();
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        setVisible(true);
+        jFrame1.dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -239,6 +290,9 @@ public class Interface_Main extends javax.swing.JFrame {
         jLabel3.setVisible(false);
         
         
+        jLabel4.setText("ES NECESARIO RELLENAR PRIMERO EL Nº DE VARIABLES");
+        
+        
         
     }
     
@@ -267,9 +321,12 @@ public class Interface_Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private java.awt.Label label1;
