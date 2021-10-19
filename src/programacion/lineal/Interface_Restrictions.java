@@ -239,15 +239,14 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             tabla_auxiliar.addColumn("coef de Z (Cj)");
             tabla_auxiliar.addColumn("V.B.");
             tabla_auxiliar.addColumn("b");
-            for (int i = 0; i < interfaz_principal.get_NumRestricciones()*2; i++) //TODO: COMPROBAR SI ES CORRECTO QUE SEA SEGÚN EL NºRESTRICCIONE O SI ES SEGÚN EL NºVARIABLES
+            for (int i = 0; i < interfaz_principal.get_NumVarDecision()+interfaz_principal.get_NumRestricciones(); i++) //TODO: COMPROBAR SI ES CORRECTO QUE SEA SEGÚN EL NºRESTRICCIONE O SI ES SEGÚN EL NºVARIABLES
                 tabla_auxiliar.addColumn("x"+(i+1));
             tabla_auxiliar.addColumn("b/a (a >= 0)");
             
             for (int i = 0; i < interfaz_principal.get_NumRestricciones()+1; i++) {
                 tabla_auxiliar.addRow(new Object[tabla_auxiliar.getColumnCount()]);
                 if (i < interfaz_principal.get_NumRestricciones()){
-                    tabla_auxiliar.setValueAt(0.0, i, 0);
-                    tabla_auxiliar.setValueAt("x"+(i+interfaz_principal.get_NumRestricciones()+1), i, 1);
+                    tabla_auxiliar.setValueAt("x"+(i+interfaz_principal.get_NumRestricciones()), i, 1);
                 }else{
                     tabla_auxiliar.setValueAt("Zj - Cj", i, 1);
                     int cont = 0;
@@ -284,9 +283,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         double menor_valor = Double.MAX_VALUE;
         for (int c = 3; c < jTable1.getColumnCount()-1; c++) { //Recorre las variables...
             String s = jTable1.getValueAt(jTable1.getRowCount()-1, c).toString();
-            System.out.println(s);
             Double d = Double.parseDouble(s);
-            System.out.println(d);
             if(d < 0 && menor_valor > d){
                 menor_valor = d;
                 columna_elegida = c;
@@ -300,20 +297,20 @@ public class Interface_Restrictions extends javax.swing.JFrame {
         int fila_elegida = -1;
         Double menor_valor = Double.MAX_VALUE, nominador, denominador, valor;
         
+        
         //CALCULAR EL (Bi/Ai) Y ELEGIR EL DE MENOR VALOR.
         for (int f = 0; f < jTable1.getRowCount()-1; f++) {
             nominador = Double.parseDouble(jTable1.getValueAt(f, 2).toString());
-            System.err.println(nominador);
             denominador = Double.parseDouble(jTable1.getValueAt(f, variable_entrante).toString());
             valor = nominador / denominador;
-            if (valor < menor_valor){
-                menor_valor = valor;
-                fila_elegida = f;
+            if (valor >= 0){
+                if (valor < menor_valor){
+                    menor_valor = valor;
+                    fila_elegida = f;
+                }
+                jTable1.setValueAt(valor.toString(), f, jTable1.getColumnCount()-1);
             }
-            jTable1.setValueAt(valor.toString(), f, jTable1.getColumnCount()-1);
         }
-        
-        System.out.println(fila_elegida); //ESTA DEVOLVIENDO UN -1.
         
         return fila_elegida;
     }
