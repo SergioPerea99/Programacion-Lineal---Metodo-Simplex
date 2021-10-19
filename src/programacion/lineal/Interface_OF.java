@@ -15,6 +15,7 @@ public class Interface_OF extends javax.swing.JFrame {
     
     Interface_Main interfaz_principal;
     ArrayList<Double> multiplos_variables;
+    ArrayList<String> variables_decision;
     Integer num_var_aniadidas = 0;
     /**
      * Creates new form Interface_Fill
@@ -27,6 +28,9 @@ public class Interface_OF extends javax.swing.JFrame {
     public void setInterface_OF(Interface_Main i){
         interfaz_principal = i;
         multiplos_variables = new ArrayList<>(interfaz_principal.get_NumVarDecision());
+        variables_decision = new ArrayList<>(interfaz_principal.get_NumVarDecision());
+        for (int j = 0; j < interfaz_principal.get_NumVarDecision(); j++)
+            variables_decision.add("x"+(j+1));
     }
 
     /**
@@ -171,4 +175,11 @@ public class Interface_OF extends javax.swing.JFrame {
     public ArrayList getMultiplosVar(){
         return multiplos_variables;
     }
+
+    public ArrayList<String> getVariables_decision() {
+        return variables_decision;
+    }
+    
+    
+    
 }

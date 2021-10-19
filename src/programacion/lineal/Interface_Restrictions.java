@@ -281,10 +281,12 @@ public class Interface_Restrictions extends javax.swing.JFrame {
      */
     private int eleccion_variable_entrante() {
         int columna_elegida = -1;
-        double menor_valor = 9999.0;
-        for (int c = 3; c < 3+interfaz_principal.get_NumVarDecision()*2 && c < jTable1.getColumnCount(); c++) { //Recorre las variables...
-            String s = jTable1.getValueAt(2, c).toString();
+        double menor_valor = Double.MAX_VALUE;
+        for (int c = 3; c < jTable1.getColumnCount()-1; c++) { //Recorre las variables...
+            String s = jTable1.getValueAt(jTable1.getRowCount()-1, c).toString();
+            System.out.println(s);
             Double d = Double.parseDouble(s);
+            System.out.println(d);
             if(d < 0 && menor_valor > d){
                 menor_valor = d;
                 columna_elegida = c;
@@ -296,11 +298,12 @@ public class Interface_Restrictions extends javax.swing.JFrame {
 
     private int eleccion_variable_saliente() {
         int fila_elegida = -1;
-        Double menor_valor = 999.0, nominador, denominador, valor;
+        Double menor_valor = Double.MAX_VALUE, nominador, denominador, valor;
         
         //CALCULAR EL (Bi/Ai) Y ELEGIR EL DE MENOR VALOR.
         for (int f = 0; f < jTable1.getRowCount()-1; f++) {
             nominador = Double.parseDouble(jTable1.getValueAt(f, 2).toString());
+            System.err.println(nominador);
             denominador = Double.parseDouble(jTable1.getValueAt(f, variable_entrante).toString());
             valor = nominador / denominador;
             if (valor < menor_valor){
@@ -310,7 +313,7 @@ public class Interface_Restrictions extends javax.swing.JFrame {
             jTable1.setValueAt(valor.toString(), f, jTable1.getColumnCount()-1);
         }
         
-        
+        System.out.println(fila_elegida); //ESTA DEVOLVIENDO UN -1.
         
         return fila_elegida;
     }
@@ -348,4 +351,9 @@ public class Interface_Restrictions extends javax.swing.JFrame {
     public JTable getTable(){
         return jTable1;
     }
+    
+    public int numFilas(){
+        return jTable1.getRowCount();
+    }
+    
 }

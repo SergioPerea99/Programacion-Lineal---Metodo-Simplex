@@ -183,7 +183,7 @@ public class Interface_Main extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -332,9 +332,10 @@ public class Interface_Main extends javax.swing.JFrame {
     }
     
     public void mostrarSolucion(){
-        String solucion = "La solución óptima es Z = "+ restricciones.getTable().getValueAt(2, restricciones.getTable().getRowCount()-1)+". \n\n";
-        for (int i = 0; i < NUM_VAR_DECISION; i++) {
-            solucion += restricciones.getTable().getValueAt(i, 1).toString()+" = "+restricciones.getTable().getValueAt(i, 2)+". \n\n";
+        String solucion = "óptimo de Z = "+ restricciones.getTable().getValueAt(restricciones.numFilas()-1, 2)+". \n\n";
+        for (int i = 0; i < restricciones.getTable().getRowCount()-1; i++) {
+            if (funcion_objetivo.getVariables_decision().contains(restricciones.getTable().getValueAt(i, 1).toString()))
+                solucion += restricciones.getTable().getValueAt(i, 1).toString()+" = "+restricciones.getTable().getValueAt(i, 2)+". \n\n";
         }
         jTextArea1.setText(solucion);
         jTextArea1.setVisible(true);
